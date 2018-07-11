@@ -44,6 +44,12 @@ public class TestController {
     }
     
     @GetMapping
+    public ModelAndView testUpload() {
+        ModelAndView mv = new ModelAndView();
+        return mv;
+    }
+    
+    @GetMapping
     public ModelAndView test() {
         ModelAndView mv = new ModelAndView();
         mv.addObject("list", list(new Page(), new Test()));
