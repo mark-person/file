@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title></title>
+
+<link th:replace="common/common::common"/>
+
+<script type="text/javascript" th:inline="javascript">
+
+var CONTROLLER = [[@{/test/}]];
+var EXIST_MSG = "testName已经存在！";
+
+$(function() {
+	refreshPage([[${list}]]);
+});
+
+var editCallback = function(r) {
+	//alert(JSON.stringify(r))
+}
+
+template.helper('getDesc', function(v) {
+	return "DESC" + v;
+})
+</script>
+</head>
+
+<body>
+<div th:replace="common/common::pageList('DEMO标题')">
+	<div th:fragment="query">
+		<button type="button" class="btn btn-success btn-sm" th:attr="disabled=${_test_insert==null?true:false}" onclick="alert('test')">测试按键</button>
+		<button type="button" class="btn btn-success btn-sm" onclick="add()">新增</button>
+		<input type="text" class="form-control input-sm" name="testName" placeholder="请输入test_name" style="width:200px;">
+		<button type="button"  class="btn btn-default btn-sm" onclick="queryPage();"><span class="glyphicon glyphicon-search"></span>搜索</button>
+	</div>
+	<table th:fragment="list">
+	<tr>
+		<th>序号</th>
+		<th class="sorting-desc" data-order-name="test_id">testId</th>
+		<th>testName</th>
+		<th data-order-name="test_price">testPrice</th>
+		<th>testDate</th>
+		<th>created</th>
+		<th>function</th>
+		<th>操作</th>
+	</tr>
+	</table>
+</div>
+<script id="pageTemplate" type="text/html">
+{{each arrayList as v i}}
+<tr>
+	<td class="w-id">{{i+1}}</td>
+	<td class="w-id">{{v.testId}}</td>
+	<td class="w-title">{{v.testName}}</td>
+	<td class="w-number">{{v.testPrice}}</td>
+	<td class="w-date">{{v.testDate}}</td>
+	<td class="w-time">{{v.created}}</td>
+	<td class="w-id">{{getDesc(v.testId)}}</td>
+	<td class="w-action">
+	<div>
+		<a href="#" onclick="remove('{{v.testId}}')">[删除]</a>
+		<a href="#" onclick="edit('{{v.testId}}', editCallback)">[修改]</a>
+	</div>
+	</td>
+</tr>
+{{/each}}
+</script>
+
+<div th:fragment="add" th:replace="common/common::modal('add', '新增', 400)">
+	<div class="form-group">
+		<label class="col-sm-4 control-label"><span class="required">*</span>testName：</label>
+		<div><input type="text" name="testName" class="form-control validate[required]" maxlength="16"></div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-4 control-label"><span class="required">*</span>testPrice：</label>
+		<div><input type="text" name="testPrice" class="form-control validate[required,custom[number]]" maxlength="7"></div>
+	</div>	
+	<div class="form-group">
+		<label class="col-sm-4 control-label"><span class="required">*</span>testDate：</label>
+		<div><input type="text" name="testDate" class="form-control validate[required]" th:value="${today}" onclick="WdatePicker()"></div>
+	</div>
+</div>
+
+<div th:fragment="edit" th:replace="common/common::modal('edit', '修改', 400)">
+	<script id="editTemplate" type="text/html">
+	<input type="hidden" name="testId" value="{{test.testId}}">
+	<div class="form-group">
+		<label class="col-sm-4 control-label"><span class="required">*</span>testName：</label>
+		<div><input type="text" name="testName" class="form-control validate[required]" maxlength="16" value="{{test.testName}}"></div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-4 control-label"><span class="required">*</span>testPrice：</label>
+		<div><input type="text" name="testPrice" class="form-control validate[required,custom[number]]" maxlength="7" value="{{test.testPrice}}"></div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-4 control-label"><span class="required">*</span>testDate：</label>
+		<div><input type="text" name="testDate" class="form-control validate[required]" onclick="WdatePicker()" value="{{test.testDate}}"></div>
+	</div>
+	</script>
+</div>
+
+</body>
+</html>
