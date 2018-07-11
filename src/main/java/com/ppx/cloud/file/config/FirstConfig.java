@@ -98,8 +98,7 @@ public class FirstConfig extends CommonConfig {
         return mongoTemplate;
     }
 	
-	@Bean(name="runFirstConf")
-    public Object runFirstConf() {
+    private void runFirstConf() {
         MongoTemplate mongoTemplate = grantMongoTemplate();
 
         // 加载first.properties配置文件
@@ -138,7 +137,6 @@ public class FirstConfig extends CommonConfig {
         });
 
         mongoTemplate.insert(insertList, COL_CONFIG);
-        return null;
     }
 	
     @Bean
