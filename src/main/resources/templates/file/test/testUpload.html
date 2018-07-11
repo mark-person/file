@@ -7,16 +7,128 @@
 <link th:replace="common/common::common"/>
 
 <script type="text/javascript" th:inline="javascript">
+//>>>>>>>>>>>>>>>>>>>img>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+var img = {};
+img.zIndex = 1000;
+img.click = function(obj) {
+	var initWidth = new Number($(obj).data("data-init-width"));
+	var initHeight = new Number($(obj).data("data-init-height"));
+	
+	if (obj.height == 80) {
+		$(obj).css({position:"fixed",left:$(obj).offset().left,top:$(obj).offset().top});
+		$(obj).css({zIndex:++img.zIndex,width:initWidth,height:initHeight});
+	}
+	else {
+		$(obj).css({position:"",zIndex:1000,width:80*initWidth/initHeight,height:80});
+	}
+}
+img.html = '<td class="imgTd"><table><tr><td rowspan="2"><img onclick="img.click(this)" onload="img.resize(this)"/></td>\
+	<td class="glyphicon glyphicon-remove-circle" onclick="img.remove(this)"></td></tr></table></td>';
+img.fileChange = function(obj) {
+	this.loadImg(obj.files, obj.files.length, $(obj).parent().parent());
+	
+	// 重新生成一个，防止在图片被删除时onchange不生效
+	$(obj).prop("outerHTML", $(obj).prop("outerHTML"));
+}
+img.loadImg = function(f, n, imgTr) {
+	n--;
+	
+	// data-max-size默认为1M,maxLength默认为1
+	var maxSize =  $(imgTr).find("input").attr("data-max-size");
+	maxSize = !maxSize ? 1024*1024 : new Number(maxSize);
+	
+	if (f[n].size > maxSize) {
+		var max = maxSize >= 1024*1024 ? (maxSize/1024/1024).toFixed(1) + "M" : (maxSize/1024).toFixed(1) + "K";
+		return alertWarning("不能大于" + max);
+	}
+	
+	// 删除之前的
+	imgTr.find(".imgTd").remove();
+	
+	var td = $(this.html);
+	td.appendTo(imgTr);
+	var reader = new FileReader();
+	reader.onload = function(e) {
+		var imgObj = td.find("img");
+		imgObj.prop("src", this.result);
+		imgObj.data("file", f[n]);
+		if (n > 0) img.loadImg(f, n, imgTr);
+	}
+	reader.readAsDataURL(f[n]);
+	
+	imgTr.find(".uploadAction").show();	
+}
+img.resize = function(img) {
+	var initWidth = img.width;
+	var intiHeight = img.height;
+	$(img).data("data-init-width", initWidth);
+	$(img).data("data-init-height", intiHeight);
+	$(img).css({width:80 * initWidth / intiHeight, height:80});
+	
+	$(img).show();
+	$(img).nextAll().remove();
+	$(img).after("<span>" + initWidth + "x" + intiHeight + "</span>");
 
+}
+img.remove = function(obj) {
+	$(obj).parents(".imgTr").find(".uploadAction").hide();
+	$(obj).parents(".imgTd").remove();
+}
+
+
+$(function() {
+});
+
+function upload(obj) {
+	var type = $(obj).attr("data-type");
+	var file = $(obj).parents(".imgTr").find("img").data("file");
+	var formData = new FormData();
+	formData.append("file", file);
+	formData.append("type", type);
+	
+	showLoading();
+	$.ajax({url:[[#{imgUrl}]] + '../imgUpload/showSave', type:"POST", contentType:false, data:formData ,processData:false,
+		success:function(r){
+			if (r.arrayList && r.arrayList.length == 1) {
+				var src = [[#{imgUrl}]] + r.arrayList[0] + "?t=" + new Date().getTime();
+				$("#" + type).css("width", "");
+				$("#" + type).css("height", "");
+				$("#" + type).attr("src", src);
+				$("#" + type).attr("title", src);
+				updateImgSrc(type, src);
+			} 
+		}
+	});
+}
+
+function updateImgSrc(type, src) {
+	$.post([[@{/img/updateImgSrc}]], "type=" + type + "&src=" + src, function(r) {
+		if (r.result == 1) {
+			alertSuccess("上传成功");
+			hideLoading();
+		}
+	});
+}
 </script>
 
 </head>
 
 
 <body>
-testUpload
+<table>
+<td><a href="#" onclick="editSrc(this)" th:attr="data-type=${img.imgType}">修改图片地址</a></td>
+<td>
+	<table border="1" style="border-color:#DDDDDD;height:84px">
+	<tr class="imgTr">
+	<td>
+		<input type="file" accept=".jpg,.png" multiple="multiple" onchange="img.fileChange(this)" style="display:none">
+		<a href="#" onclick="$(this).prev().click()">[+]</a>
+		<a href="#" style="display:none" class="uploadAction" onclick="upload(this)" th:attr="data-type=${img.imgType}" >上传</a>
+	</td>
+	</table>
+</td>
 
-
+</table>
 
 
 </body>
