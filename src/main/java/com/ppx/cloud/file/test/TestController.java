@@ -35,7 +35,7 @@ public class TestController {
         String token = JWT.create().withIssuedAt(new Date())
                 .withClaim("accountId", -1)
                 .withClaim("loginAccount", "admin")
-                .withClaim("merId", "-1")
+                .withClaim("merId", -1)
                 .withClaim("merName", "admin")
                 .sign(algorithm);
         CookieUtils.setCookie(response, AuthUtils.PPXTOKEN, token);

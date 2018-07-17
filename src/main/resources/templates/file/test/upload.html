@@ -81,22 +81,23 @@ $(function() {
 });
 
 function upload(obj) {
-	var type = $(obj).attr("data-type");
 	var file = $(obj).parents(".imgTr").find("img").data("file");
 	var formData = new FormData();
 	formData.append("file", file);
-	formData.append("type", type);
 	
 	showLoading();
-	$.ajax({url:[[#{imgUrl}]] + '../imgUpload/showSave', type:"POST", contentType:false, data:formData ,processData:false,
-		success:function(r){
+	$.ajax({url:[[#{imgUrl}]] + 'fileUpload/showImgUpload', type:"POST", contentType:false, data:formData ,processData:false,
+		success:function(r) {
 			if (r.arrayList && r.arrayList.length == 1) {
 				var src = [[#{imgUrl}]] + r.arrayList[0] + "?t=" + new Date().getTime();
+				/*
 				$("#" + type).css("width", "");
 				$("#" + type).css("height", "");
 				$("#" + type).attr("src", src);
 				$("#" + type).attr("title", src);
-				updateImgSrc(type, src);
+				*/
+				hideLoading();
+				//updateImgSrc(type, src);
 			} 
 		}
 	});

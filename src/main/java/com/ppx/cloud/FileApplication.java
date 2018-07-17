@@ -13,6 +13,10 @@ public class FileApplication {
         ApplicationUtils.context = SpringApplication.run(FileApplication.class, args);
         ApplicationHome home = new ApplicationHome(FileApplication.class);
         ApplicationUtils.JAR_HOME = home.getSource().getParent() + "/";
+        
+        ApplicationUtils.JAR_HOME = "F:\\upload/";
+        System.out.println("999999999999999-x");
+
     }
 
 }
