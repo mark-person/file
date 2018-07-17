@@ -26,13 +26,13 @@ public class AuthInterceptor implements HandlerInterceptor {
 		String uri = request.getRequestURI().replace(contextPath, "");
 		
 		// 不拦截
-		if (uri.startsWith("/test/jwt")) {
+		if (uri.startsWith("/test/login")) {
 			return true;
 		}
 		
 		LoginAccount account = AuthFilterUtils.getLoginAccout(request, response, uri);
 		if (account == null) {
-		    throw new PermissionUrlException("Unauthorized.forbiddens:" + uri);
+		    throw new PermissionUrlException("Unauthorized.forbidden:" + uri);
 		} else {
 			AuthContext.setLoginAccount(account);
 		}

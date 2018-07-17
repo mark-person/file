@@ -29,7 +29,7 @@ public class TestController {
     private TestServiceImpl impl;
     
     @GetMapping @ResponseBody
-    public Map<String, Object> jwt(HttpServletResponse response) throws Exception {
+    public Map<String, Object> login(HttpServletResponse response) throws Exception {
         
         Algorithm algorithm = Algorithm.HMAC256(AuthUtils.getJwtPassword());
         String token = JWT.create().withIssuedAt(new Date())
@@ -44,7 +44,7 @@ public class TestController {
     }
     
     @GetMapping
-    public ModelAndView testUpload() {
+    public ModelAndView upload() {
         ModelAndView mv = new ModelAndView();
         return mv;
     }
