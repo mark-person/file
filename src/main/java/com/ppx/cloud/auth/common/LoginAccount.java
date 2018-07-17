@@ -1,4 +1,4 @@
-package com.ppx.cloud.grant.common;
+package com.ppx.cloud.auth.common;
 
 /**
  * 登录帐号

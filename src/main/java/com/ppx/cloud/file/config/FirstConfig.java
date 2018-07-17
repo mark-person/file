@@ -28,8 +28,8 @@ import com.mongodb.MongoClientURI;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.WriteConcern;
-import com.ppx.cloud.common.adapt.mongo.MongoUriItem;
 import com.ppx.cloud.common.config.CommonConfig;
+import com.ppx.cloud.common.util.MongoUriItem;
 
 /**
  * 第一次配置生效使用grant的mongodb
@@ -39,22 +39,26 @@ import com.ppx.cloud.common.config.CommonConfig;
 @Configuration
 public class FirstConfig extends CommonConfig {
 	
-	@Value("${spring.data.mongodb.grant.uri}")
-	private String mongodbGrantUri;
+	@Value("${spring.data.mongodb.uri}")
+	private String mongodbUri;
+	
+	@Value("${spring.data.mongodb.grant.items}")
+    private String mongodbGrantItems;
 	
 	@Value("${server.port}")
     private String serverPort;
 	
+	public final static String RUN_FIRST_CONF_BEAN = "RUN_FIRST_CONF_BEAN";
+	
 	private final static String COL_CONFIG = "config";
 	
-	@Override
 	public void setServerPort() {
-	    FirstConfig.SERVER_PORT = serverPort;
-	}
+	    CommonConfig.SERVER_PORT = serverPort;
+    }
 	
 	@Bean(name="grantMongoTemplate")
 	public MongoTemplate grantMongoTemplate() {
-        MongoUriItem item = MongoUriItem.getMongoUriItem(mongodbGrantUri);
+        MongoUriItem item = MongoUriItem.getMongoUriItem(mongodbUri, mongodbGrantItems);
         MongoTemplate mongoTemplate = getNoAuthMongoTemplate(item);
         try {
             mongoTemplate.collectionExists("test"); 
@@ -98,7 +102,8 @@ public class FirstConfig extends CommonConfig {
         return mongoTemplate;
     }
 	
-    private void runFirstConf() {
+	@Bean(name="RUN_FIRST_CONF_BEAN")
+    public Object runFirstConfBean() {
         MongoTemplate mongoTemplate = grantMongoTemplate();
 
         // 加载first.properties配置文件
@@ -137,11 +142,12 @@ public class FirstConfig extends CommonConfig {
         });
 
         mongoTemplate.insert(insertList, COL_CONFIG);
+        return null;
     }
 	
     @Bean
     public DataSource dataSource() {
-        runFirstConf();
+        runFirstConfBean();
         return super.dataSource();
     }
 

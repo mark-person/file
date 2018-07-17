@@ -1,4 +1,4 @@
-package com.ppx.cloud.grant.common;
+package com.ppx.cloud.auth.common;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ppx.cloud.auth.filter.AuthFilterUtils;
 import com.ppx.cloud.common.exception.custom.PermissionUrlException;
-import com.ppx.cloud.grant.filter.GrantFilterUtils;
 
 
 
@@ -17,7 +17,7 @@ import com.ppx.cloud.grant.filter.GrantFilterUtils;
  * @author mark
  * @date 2018年6月19日
  */
-public class GrantInterceptor implements HandlerInterceptor {
+public class AuthInterceptor implements HandlerInterceptor {
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
@@ -30,11 +30,11 @@ public class GrantInterceptor implements HandlerInterceptor {
 			return true;
 		}
 		
-		LoginAccount account = GrantFilterUtils.getLoginAccout(request, response, uri);
+		LoginAccount account = AuthFilterUtils.getLoginAccout(request, response, uri);
 		if (account == null) {
 		    throw new PermissionUrlException("Unauthorized.forbiddens:" + uri);
 		} else {
-			GrantContext.setLoginAccount(account);
+			AuthContext.setLoginAccount(account);
 		}
 
 		return true;

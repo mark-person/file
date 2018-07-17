@@ -1,4 +1,4 @@
-package com.ppx.cloud.grant.filter;
+package com.ppx.cloud.auth.filter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,19 +11,19 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.ppx.cloud.auth.common.AuthUtils;
+import com.ppx.cloud.auth.common.LoginAccount;
 import com.ppx.cloud.common.util.CookieUtils;
-import com.ppx.cloud.grant.common.GrantUtils;
-import com.ppx.cloud.grant.common.LoginAccount;
 
 /**
  * 权限过滤工具
  * @author mark
  * @date 2018年7月2日
  */
-public class GrantFilterUtils {
+public class AuthFilterUtils {
  
     
-    private static final Logger logger = LoggerFactory.getLogger(GrantFilterUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthFilterUtils.class);
     
     
     /**
@@ -41,7 +41,7 @@ public class GrantFilterUtils {
     public static LoginAccount getLoginAccout(HttpServletRequest request, HttpServletResponse response, String uri) {
 
         // 从cookie中取得token
-        String token = CookieUtils.getCookieMap(request).get(GrantUtils.PPXTOKEN);
+        String token = CookieUtils.getCookieMap(request).get(AuthUtils.PPXTOKEN);
 
         // token为空,表示未登录
         if (StringUtils.isEmpty(token)) {
@@ -51,7 +51,7 @@ public class GrantFilterUtils {
         Algorithm algorithm = null;
         DecodedJWT jwt = null;
         try {
-            algorithm = Algorithm.HMAC256(GrantUtils.getJwtPassword());
+            algorithm = Algorithm.HMAC256(AuthUtils.getJwtPassword());
             JWTVerifier verifier = JWT.require(algorithm).build();
             jwt = verifier.verify(token);
         } catch (Exception e) {

@@ -15,11 +15,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.ppx.cloud.auth.common.AuthUtils;
 import com.ppx.cloud.common.controller.ControllerReturn;
 import com.ppx.cloud.common.page.Page;
 import com.ppx.cloud.common.util.CookieUtils;
 import com.ppx.cloud.common.util.DateUtils;
-import com.ppx.cloud.grant.common.GrantUtils;
 
 
 @Controller
@@ -31,14 +31,14 @@ public class TestController {
     @GetMapping @ResponseBody
     public Map<String, Object> jwt(HttpServletResponse response) throws Exception {
         
-        Algorithm algorithm = Algorithm.HMAC256(GrantUtils.getJwtPassword());
+        Algorithm algorithm = Algorithm.HMAC256(AuthUtils.getJwtPassword());
         String token = JWT.create().withIssuedAt(new Date())
                 .withClaim("accountId", -1)
                 .withClaim("loginAccount", "admin")
                 .withClaim("merId", "-1")
                 .withClaim("merName", "admin")
                 .sign(algorithm);
-        CookieUtils.setCookie(response, GrantUtils.PPXTOKEN, token);
+        CookieUtils.setCookie(response, AuthUtils.PPXTOKEN, token);
         
         return ControllerReturn.ok();
     }

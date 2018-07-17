@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ppx.cloud.auth.common.AuthContext;
 import com.ppx.cloud.common.controller.ControllerReturn;
-import com.ppx.cloud.grant.common.GrantContext;
 
 import net.coobird.thumbnailator.Thumbnails;
 
@@ -67,7 +67,7 @@ public class FileUploadController {
     }
 
     private String getProdImgPath(String fileName) {
-        int merId = GrantContext.getLoginAccount().getMerId();
+        int merId = AuthContext.getLoginAccount().getMerId();
         String path = merId + "/prod/" + df.format(new Date());
         File pathFile = new File(UPLOAD_FILE_PATH + path);
         if (!pathFile.exists()) {

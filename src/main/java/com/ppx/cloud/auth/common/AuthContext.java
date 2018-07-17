@@ -1,4 +1,4 @@
-package com.ppx.cloud.grant.common;
+package com.ppx.cloud.auth.common;
 
 
 /**
@@ -6,7 +6,7 @@ package com.ppx.cloud.grant.common;
  * @author mark
  * @date 2018年6月20日
  */
-public class GrantContext {
+public class AuthContext {
 	
 	public static ThreadLocal<LoginAccount> threadLocalAccount = new ThreadLocal<LoginAccount>();
 
