@@ -10,17 +10,20 @@
 
 //>>>>>>>>>>>>>>>>>>>img>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 var img = {};
+var IMG_SCALE_HEIGHT = 80;
+var IMG_MAX_SIZE = 1024*1024;
+
 img.zIndex = 1000;
 img.click = function(obj) {
 	var initWidth = new Number($(obj).data("data-init-width"));
 	var initHeight = new Number($(obj).data("data-init-height"));
 	
-	if (obj.height == 80) {
+	if (obj.height == IMG_SCALE_HEIGHT) {
 		$(obj).css({position:"fixed",left:$(obj).offset().left,top:$(obj).offset().top});
 		$(obj).css({zIndex:++img.zIndex,width:initWidth,height:initHeight});
 	}
 	else {
-		$(obj).css({position:"",zIndex:1000,width:80*initWidth/initHeight,height:80});
+		$(obj).css({position:"",zIndex:1000,width:80*initWidth/initHeight,height:IMG_SCALE_HEIGHT});
 	}
 }
 img.html = '<td class="imgTd"><table><tr><td rowspan="2"><img onclick="img.click(this)" onload="img.resize(this)"/></td>\
@@ -36,7 +39,7 @@ img.loadImg = function(f, n, imgTr) {
 	
 	// data-max-size默认为1M,maxLength默认为1
 	var maxSize =  $(imgTr).find("input").attr("data-max-size");
-	maxSize = !maxSize ? 1024*1024 : new Number(maxSize);
+	maxSize = !maxSize ? IMG_MAX_SIZE : new Number(maxSize);
 	
 	if (f[n].size > maxSize) {
 		var max = maxSize >= 1024*1024 ? (maxSize/1024/1024).toFixed(1) + "M" : (maxSize/1024).toFixed(1) + "K";
@@ -64,7 +67,7 @@ img.resize = function(img) {
 	var intiHeight = img.height;
 	$(img).data("data-init-width", initWidth);
 	$(img).data("data-init-height", intiHeight);
-	$(img).css({width:80 * initWidth / intiHeight, height:80});
+	$(img).css({width:IMG_SCALE_HEIGHT * initWidth / intiHeight, height:IMG_SCALE_HEIGHT});
 	
 	$(img).show();
 	$(img).nextAll().remove();
@@ -134,10 +137,10 @@ function updateImgSrc(type, src) {
 		<a href="#" onclick="$(this).prev().click()">[ + ]</a>
 		<a href="#" style="display:none" class="uploadAction" onclick="upload(this)">上传</a>
 	</td>
+	</tr>
 	</table>
 </td>
 </tr>
-
 </table>
 
 
