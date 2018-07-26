@@ -62,7 +62,7 @@ public class FileUploadController {
     }
 
     private String getShowImgPath(String fileName) {
-        int merId = AuthContext.getLoginAccount().getMerId();
+        int merId = 1;// AuthContext.getLoginAccount().getMerId();
         String path = merId + "/" + SHOW_PATH + df.format(new Date());
         File pathFile = new File(ApplicationUtils.JAR_HOME + UPLOAD_PATH + path);
         if (!pathFile.exists()) {

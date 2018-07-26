@@ -14,8 +14,7 @@ public class FileApplication {
         ApplicationHome home = new ApplicationHome(FileApplication.class);
         ApplicationUtils.JAR_HOME = home.getSource().getParent() + "/";
         
-        ApplicationUtils.JAR_HOME = "F:\\upload/";
-        System.out.println("999999999999999-x");
+        ApplicationUtils.JAR_HOME = "E:\\upload/";
 
     }
 

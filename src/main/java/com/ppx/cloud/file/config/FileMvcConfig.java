@@ -37,7 +37,6 @@ public class FileMvcConfig extends CommonMvcConfig {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         super.addResourceHandlers(registry);
         
-        System.out.println("88888888888-x");
     }
 	
 	
