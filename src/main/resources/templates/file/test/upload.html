@@ -100,6 +100,7 @@ function upload(obj) {
 				$("#" + type).attr("title", src);
 				*/
 				hideLoading();
+				alert("OK");
 				//updateImgSrc(type, src);
 			} 
 		}
@@ -128,12 +129,15 @@ function updateImgSrc(type, src) {
 <td>.................</td>
 <td>.................</td>
 <td>.................</td>
-<td><a href="#" onclick="editSrc(this)" >修改图片地址</a></td>
+<td><a href="#" onclick="editSrc(this)" >修改地址</a></td>
 <td>
 	<table border="1" style="border-color:#DDDDDD;height:84px">
 	<tr class="imgTr">
 	<td>
+		<input type="file" multiple="multiple" onchange="img.fileChange(this)" style="display:none">
+		<!--  
 		<input type="file" accept=".jpg,.png" multiple="multiple" onchange="img.fileChange(this)" style="display:none">
+		-->
 		<a href="#" onclick="$(this).prev().click()">[ + ]</a>
 		<a href="#" style="display:none" class="uploadAction" onclick="upload(this)">上传</a>
 	</td>
