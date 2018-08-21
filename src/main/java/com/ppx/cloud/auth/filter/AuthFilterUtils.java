@@ -27,6 +27,7 @@ public class AuthFilterUtils {
     
     
     /**
+     * TODO 改成从header里读
      * # 跳到login的情况 
      * 1. 没有token 
      * 2. tockcen校验异常(token不同法或jwt密码被改) 
@@ -39,10 +40,9 @@ public class AuthFilterUtils {
      * @return 返回null则跳到login页
      */
     public static LoginAccount getLoginAccout(HttpServletRequest request, HttpServletResponse response, String uri) {
-
-        // 从cookie中取得token
-        String token = CookieUtils.getCookieMap(request).get(AuthUtils.PPXTOKEN);
-
+        
+        String token = request.getHeader(AuthUtils.PPXTOKEN);
+        
         // token为空,表示未登录
         if (StringUtils.isEmpty(token)) {
             return null;

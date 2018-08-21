@@ -1,0 +1,31 @@
+
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title></title>
+
+<link th:replace="common/common::common"/>
+
+
+<script type="text/javascript" th:inline="javascript">
+
+
+
+
+function test() {
+	
+	$.ajax({url:[[@{/test/post}]], headers:{"PPXTOKENx":[[${tocken}]]}, type:"POST", success:function(r) {
+		alert(r.actionStatus);
+	}})
+}
+</script>
+
+</head>
+<body>
+	log
+	<button type="button" onclick="test()">test</button>
+	
+</body>
+</html>

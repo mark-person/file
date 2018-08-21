@@ -3,6 +3,7 @@ package com.ppx.cloud.file.test;
 import java.util.Date;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.ppx.cloud.auth.common.AuthContext;
 import com.ppx.cloud.auth.common.AuthUtils;
+import com.ppx.cloud.auth.common.LoginAccount;
 import com.ppx.cloud.common.controller.ControllerReturn;
 import com.ppx.cloud.common.page.Page;
 import com.ppx.cloud.common.util.CookieUtils;
@@ -40,6 +43,26 @@ public class TestController {
                 .sign(algorithm);
         CookieUtils.setCookie(response, AuthUtils.PPXTOKEN, token);
         
+        return ControllerReturn.ok();
+    }
+    
+    @GetMapping
+    public ModelAndView index(HttpServletRequest request) {
+        ModelAndView mv = new ModelAndView();
+        
+        
+        
+        String tocken = CookieUtils.getCookieMap(request).get(AuthUtils.PPXTOKEN);
+        mv.addObject("tocken", tocken);
+        
+        return mv;
+    }
+    
+    @PostMapping @ResponseBody
+    public Map<String, Object> post() {
+        LoginAccount a = AuthContext.getLoginAccount();
+        
+        System.out.println("-------post:" + a.getMerName());
         return ControllerReturn.ok();
     }
     
