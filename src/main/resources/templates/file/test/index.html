@@ -16,7 +16,7 @@
 
 function test() {
 	
-	$.ajax({url:[[@{/test/post}]], headers:{"PPXTOKENx":[[${tocken}]]}, type:"POST", success:function(r) {
+	$.ajax({url:[[@{/test/post}]], headers:{[[${tokenName}]]:[[${tocken}]]}, type:"POST", success:function(r) {
 		alert(r.actionStatus);
 	}})
 }

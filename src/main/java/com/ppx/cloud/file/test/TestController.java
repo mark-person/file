@@ -52,8 +52,11 @@ public class TestController {
         
         
         
-        String tocken = CookieUtils.getCookieMap(request).get(AuthUtils.PPXTOKEN);
-        mv.addObject("tocken", tocken);
+        String token = CookieUtils.getCookieMap(request).get(AuthUtils.PPXTOKEN);
+        
+        mv.addObject("tokenName", AuthUtils.PPXTOKEN);
+        mv.addObject("token", token);
+        
         
         return mv;
     }
